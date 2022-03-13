@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// P2-StatefulWidgetのコード
+
 void main() {
   runApp(const MyApp());
 }
@@ -10,20 +12,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter StatefulWidget',
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -31,10 +31,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final _list = <String>[];
 
   void _incrementCounter() {
-    setState(() {
+    setState(() { //
       _counter++;
+      _list.add(_counter.toString());
+    });
+  }
+
+  void _removeAt(int index) {
+    setState(() {
+      _list.removeAt(index);
     });
   }
 
@@ -44,24 +52,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
 
-        title: Text(widget.title),
+        title: const Text('StatefulWidget'),
       ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: ListView.builder(
+          itemCount: _list.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: ListTile(
+                title: Text(
+                  _list[index],
+                  style: const TextStyle(color: Colors.black, fontSize: 18.0),
+                ),
+                onTap: () {
+                  _removeAt(index);
+                },
+              )
+            );
+          }
       ),
+
+
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
